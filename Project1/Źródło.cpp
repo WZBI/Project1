@@ -9,6 +9,8 @@
 #include<vector>
 #include<sstream>
 
+
+
 using namespace std;
 string zamianawielkosciliter(string input) {
 	string output = input;
@@ -17,24 +19,27 @@ string zamianawielkosciliter(string input) {
 	return output;
 }
 
-int main()
+
+int main()	
 {
-
-
-
-	string wybur;
+	int powrot;
+	poczatek:
+	string wybor;
+	system("cls");
 	while (true) {
 		cout << "1.Podroz\n";
 		cout << "2.Budowa drogi\n";
 		cout << "3.Wybudowane drogi\n";
-		cin >> wybur;
-		if (wybur == "1") {
+		cout << "4.Wyburz wszystkie drogi.\n";
+		cout << "5.Zakoncz program\n";
+		cin >> wybor;
+		if (wybor == "1") {
 			system("cls");
-			string Miastowy, Miastodo, line3, line4;
+			string Miastowy, Miastodo, line3;
 
 			cout << "Do ktorego miasta chcesz sie udac: ";
-			Miastodo = zamianawielkosciliter(Miastodo);
 			cin >> Miastodo;
+			Miastodo = zamianawielkosciliter(Miastodo);
 			ifstream plikzapisu;
 			plikzapisu.open("plikzaspizu.cvs");
 			if (!plikzapisu.is_open()) {
@@ -55,28 +60,48 @@ int main()
 				plikzapisu.seekg(0, ios::beg);
 
 				while (getline(plikzapisu, line3)) {
-					if (line3.find(Miastowy) != string::npos) {             //Sprawdzanie czy s≥owo wpisane jest w pliku(dla miasta 1)
-						cout << line3 << endl;
+					if (line3.find(Miastowy + " " + Miastodo) != string::npos || line3.find(Miastodo + " " + Miastowy) != string::npos) {		//sprawdzanie czy po≥πczenie istnieje
 						czywybudowane = true;
+						cout << "Podroz udana." << endl;
 						break;
 					}
+
 				}
 				if (!czywybudowane) {
 					cout << "Brak polaczenia drogowego miedzy miastami." << endl;
 				}
 			}
-			
-			
+			cout << "Aby powrocic do menu nacisnij 5.";
+			cin >> powrot;
+			if (powrot == 5) {
+				goto poczatek;
+			}
+			if (powrot != 5)//naprwaiÊ zapÍtlanie siÍ dla litter
+			{
+				while (true) {
+					cout << "Zakonczyc program mozesz z menu." << endl;
+
+					cout << "Aby powrocic do menu nacisnij 5.";
+					cin >> powrot;
+					if (powrot == 5) {
+						goto poczatek;
+					}
+				}
+
+			}
+
+
 		}
-		if (wybur == "2") {
+		if (wybor == "2") {
 			system("cls");
 			string line, line2, Miasto1, Miasto2;
 
-			ifstream inputFile("B:\\visual\\Project\\PlikèrÛd≥owy.csv");
+			ifstream inputFile("PlikèrÛd≥owy.csv");
 			bool found = false;
 
+
 			while (!found) {
-				cout << "Wprowadz miasto z ktorego budujesz droge: ";	
+				cout << "Wprowadz miasto z ktorego budujesz droge: ";
 				getline(cin, Miasto1);
 				Miasto1 = zamianawielkosciliter(Miasto1);
 
@@ -183,23 +208,126 @@ int main()
 			cin >> Taklubnie;
 			Taklubnie = zamianawielkosciliter(Taklubnie);
 			if (Taklubnie == "Tak") {
-				cout << "Droga zostala zbudowana i zapisana." << endl; 
-				ofstream plikzapisu;
-				plikzapisu.open("plikzaspizu.cvs");
-				plikzapisu << Miasto1 << " " << Miasto2 << " " << odleg≥oúÊ << endl;// nadpisuje linijki
+				string szukanielini;
+				bool czyistnieje = false;
+				ifstream plikzapisu("plikzaspizu.cvs");
+				while (getline(plikzapisu, szukanielini)) {
+					if (szukanielini.find(Miasto1 + " " + Miasto2) != string::npos || szukanielini.find(Miasto2 + " " + Miasto1) != string::npos) {
+						czyistnieje = true;
+						cout << "Polaczenie juz istnieje." << endl;
+						break;
+					}
+
+				}
 				plikzapisu.close();
+				if (!czyistnieje) {
+					cout << "Droga zostala zbudowana i zapisana." << endl;
+					ofstream plikzapisu;
+					plikzapisu.open("plikzaspizu.cvs", ios::out | ios::app);
+					plikzapisu << Miasto1 << " " << Miasto2 << " " << odleg≥oúÊ << endl;// nadpisuje linijki
+					plikzapisu.close();
+				}
+
+
+
+
+
 			}
-			else {
-				return 0;
+			cout << "Aby powrocic do menu nacisnij 5.";
+			cin >> powrot;
+			if (powrot == 5) {
+				goto poczatek;
 			}
-			
+			if (powrot != 5)//naprwaiÊ zapÍtlanie siÍ dla litter
+			{
+				while (true) {
+					cout << "Zakonczyc program mozesz z menu." << endl;
+
+					cout << "Aby powrocic do menu nacisnij 5.";
+					cin >> powrot;
+					if (powrot == 5) {
+						goto poczatek;
+					}
+				}
+
+			}
+
 
 
 
 		}
-		//if (wybur == "3") {
-			//wczytaj z pliku wybudowane drogi
-		//}
+		if (wybor == "3") {
+			system("cls");
+			string linia4;
+			ifstream plikzapisu("plikzaspizu.cvs");
+			if (plikzapisu.is_open()) {
+				while (getline(plikzapisu, linia4))
+				{
+					int bezliczb = linia4.find_first_of("0123456789");
+					if (bezliczb != string::npos)
+					{
+						linia4 = linia4.substr(0, bezliczb);
+					}
+					cout << linia4 << endl;
+				}
+			}
+			if (!plikzapisu.is_open())
+			{
+				cout << "Nie mozna otworzyc pliku." << endl;
+			}
+			plikzapisu.close();
+			cout << "Aby powrocic do menu nacisnij 5.";
+			cin >> powrot;
+			if (powrot == 5) {
+				goto poczatek;
+			}
+			if(powrot!=5)//naprwaiÊ zapÍtlanie siÍ dla litter
+			{
+				while (true) {
+					cout << "Zakonczyc program mozesz z menu." << endl;
+
+					cout << "Aby powrocic do menu nacisnij 5.";
+					cin >> powrot;
+					if (powrot == 5) {
+						goto poczatek;
+					}
+				}
+				
+			}
+		}
+		if (wybor == "4") {
+			ofstream plikzapisu("plikzaspizu.cvs", ofstream::out | ofstream::trunc);//czyúci plik z trasami
+			if (plikzapisu.is_open()) {
+				plikzapisu.close();
+			}
+			else {
+				cout << "Nie moøna otworzyÊ pliku.";
+			}
+			cout << "Aby powrocic do menu nacisnij 5.";
+			cin >> powrot;
+			if (powrot == 5) {
+				goto poczatek;
+			}
+			if (powrot != 5)//naprwaiÊ zapÍtlanie siÍ dla litter
+			{
+				while (true) {
+					cout << "Zakonczyc program mozesz z menu." << endl;
+
+					cout << "Aby powrocic do menu nacisnij 5.";
+					cin >> powrot;
+					if (powrot == 5) {
+						goto poczatek;
+					}
+				}
+
+			}
+		}
+		if (wybor == "5") {
+			return 0;
+		}
+		else {
+			goto poczatek;
+		}
 		
 
 
@@ -218,12 +346,13 @@ int main()
 
 
 
-
-
-
-
-
-
-
-		}
 	}
+
+
+
+
+
+
+
+		
+}
